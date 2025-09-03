@@ -10,7 +10,7 @@ local api = vim.api
 local augroup = api.nvim_create_augroup('NaughieWorkingUri', { clear = true })
 
 local states = {
-    local = {
+    localhost = {
         cwd = mkstate.tab(),
     },
 
@@ -24,7 +24,7 @@ local function create_autocmd(opts)
         group = augroup,
         callback = function()
             local cwd = vim.uv.cwd()
-            states.local.cwd.set(cwd)
+            states.localhost.cwd.set(cwd)
         end,
     })
 
@@ -32,14 +32,14 @@ local function create_autocmd(opts)
         group = augroup,
         callback = function()
             local cwd = vim.uv.cwd()
-            states.local.cwd.set(cwd)
+            states.localhost.cwd.set(cwd)
         end,
     })
 
     api.nvim_create_autocmd('TabEnter', {
         group = augroup,
         callback = function()
-            local cwd = states.local.cwd.get()
+            local cwd = states.localhost.cwd.get()
             local old_cwd = vim.uv.cwd()
             if cwd and cwd ~= old_cwd then vim.uv.chdir(cwd) end
         end
@@ -49,7 +49,7 @@ local function create_autocmd(opts)
         group = augroup,
         callback = function(ev)
             local tab = tonumber(ev.file) 
-            states.local.cwd.clear(tab)
+            states.localhost.cwd.clear(tab)
             states.remote.uri.clear(tab)
         end,
     })
@@ -60,10 +60,10 @@ local function create_autocmd(opts)
         callback = function(ev)
             local scope = vim.v.event.scope
             local new_dir = vim.v.event.cwd
-            states.local.cwd.set(new_dir)
+            states.localhost.cwd.set(new_dir)
 
             if scope == "global" and not opts.no_global_cd then
-                states.local.cwd.iter_mut(function() return new_dir end)
+                states.localhost.cwd.iter_mut(function() return new_dir end)
             end
         end,
     })
