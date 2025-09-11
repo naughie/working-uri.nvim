@@ -69,6 +69,12 @@ local function create_autocmd(opts)
     })
 end
 
+M.local = {
+    inspect = function()
+        return vim.inspect(states.localhost)
+    end,
+}
+
 M.remote = {
     get = function(tab)
         return states.remote.uri.get(tab)
@@ -76,6 +82,10 @@ M.remote = {
 
     set = function(uri, tab)
         return states.remote.uri.set(uri, tab)
+    end,
+
+    inspect = function()
+        return vim.inspect(states.remote)
     end,
 }
 
