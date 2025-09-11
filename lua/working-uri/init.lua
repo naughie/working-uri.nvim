@@ -69,7 +69,7 @@ local function create_autocmd(opts)
     })
 end
 
-M.local = {
+M.localhost = {
     inspect = function()
         return vim.inspect(states.localhost)
     end,
