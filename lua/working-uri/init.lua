@@ -38,10 +38,11 @@ local function create_autocmd(opts)
 
     api.nvim_create_autocmd('TabEnter', {
         group = augroup,
+        nested = true,
         callback = function()
             local cwd = states.localhost.cwd.get()
             local old_cwd = vim.uv.cwd()
-            if cwd and cwd ~= old_cwd then vim.uv.chdir(cwd) end
+            if cwd and cwd ~= old_cwd then api.nvim_set_current_dir(cwd) end
         end
     })
 
