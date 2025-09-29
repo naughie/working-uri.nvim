@@ -28,14 +28,6 @@ local function create_autocmd(opts)
         end,
     })
 
-    api.nvim_create_autocmd('VimEnter', {
-        group = augroup,
-        callback = function()
-            local cwd = vim.uv.cwd()
-            states.localhost.cwd.set(cwd)
-        end,
-    })
-
     api.nvim_create_autocmd('TabEnter', {
         group = augroup,
         nested = true,
@@ -92,6 +84,7 @@ M.remote = {
 
 function M.setup(opts)
     local merged_opts = vim.tbl_deep_extend("force", vim.deepcopy(default_opts), opts or {})
+    states.localhost.cwd.set(vim.uv.cwd())
     create_autocmd(merged_opts)
 end
 
